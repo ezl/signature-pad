@@ -174,6 +174,6 @@ Versioned using Semantic Versioning, <http://semver.org/>
 <http://github.com/thomasjbradley/signature-pad>
 
 ## License
-Signature Pad is licensed under the [New BSD license](https://github.com/thomasjbradley/signature-pad/blob/master/NEW-BSD-LICENSE.txt).
+Signature Pad is licensed under the [New BSD license](https://github.com/ezl/signature-pad/blob/master/LICENSE.txt).
 
 All dependencies: jQuery, json2.js, and FlashCanvas retain their own licenses.
