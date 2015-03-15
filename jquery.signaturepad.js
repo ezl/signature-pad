@@ -234,7 +234,7 @@ function SignaturePad (selector, options) {
         var retrace = output.slice(output.length - maxCacheLength + 2, output.length);
 
         canvasContext.strokeStyle = settings.bgColour;
-        for (i in retrace) {
+        for (var i = 0; i < retrace.length; i++) {
           var point = retrace[i];
           canvasContext.beginPath()
           canvasContext.moveTo(point.mx, point.my)
@@ -741,7 +741,7 @@ function SignaturePad (selector, options) {
       var simpleTuples = section.map(function(n) {return[n.lx, n.ly]});
       var beziers = getBezierControlPoints(simpleTuples);
 
-      for (var i in beziers) {
+      for (var i = 0; i < beziers.length; i++) {
         var p0 = beziers[i][0],
             p1 = beziers[i][1],
             p2 = beziers[i][2],
@@ -858,7 +858,7 @@ function SignaturePad (selector, options) {
       context.scale.apply(context, settings.scale);
     }
 
-    for(var i in paths) {
+    for(var i = 0; i < paths.length; i++) {
       if (typeof paths[i] === 'object') {
 
         if (settings.drawBezierCurves === false) {
