@@ -275,13 +275,10 @@ function SignaturePad (selector, options) {
     if (!!e && !(e.type === "touchend" || e.type == "touchcancel")) {
       drawLine(e, 1)
     } else {
-      if (touchable) {
-        canvas.each(function () {
-          this.removeEventListener('touchmove', drawLine)
-        })
-      } else {
-        canvas.unbind('mousemove.signaturepad')
-      }
+      canvas.each(function () {
+        this.removeEventListener('touchmove', drawLine)
+      })
+      canvas.unbind('mousemove.signaturepad')
 
       if (output.length > 0) {
         if (settings.onDrawEnd && typeof settings.onDrawEnd === 'function')
@@ -371,7 +368,7 @@ function SignaturePad (selector, options) {
    * @param {Object} touchObject The object context registered to the event; canvas
    */
   function startDrawing (e, touchObject) {
-    if (touchable) {
+    if (touchObject) {
       touchObject.addEventListener('touchmove', onMouseMove, false)
     } else {
       canvas.bind('mousemove.signaturepad', onMouseMove)
@@ -429,35 +426,30 @@ function SignaturePad (selector, options) {
     if (typeof e.changedTouches !== 'undefined')
       touchable = true
 
-    if (touchable) {
-      canvas.each(function () {
-        this.addEventListener('touchend', stopDrawing, false)
-        this.addEventListener('touchcancel', stopDrawing, false)
-      })
+    canvas.each(function () {
+      this.addEventListener('touchend', stopDrawing, false)
+      this.addEventListener('touchcancel', stopDrawing, false)
+    })
+    $(document).bind('mouseup.signaturepad', function () {
+      if (mouseButtonDown) {
+        stopDrawing()
+        clearMouseLeaveTimeout()
+      }
+    })
+    canvas.bind('mouseleave.signaturepad', function (e) {
+      if (mouseButtonDown) stopDrawing(e)
 
-      canvas.unbind('mousedown.signaturepad')
-    } else {
-      $(document).bind('mouseup.signaturepad', function () {
-        if (mouseButtonDown) {
+      if (mouseButtonDown && !mouseLeaveTimeout) {
+        mouseLeaveTimeout = setTimeout(function () {
           stopDrawing()
           clearMouseLeaveTimeout()
-        }
-      })
-      canvas.bind('mouseleave.signaturepad', function (e) {
-        if (mouseButtonDown) stopDrawing(e)
+        }, 500)
+      }
+    })
 
-        if (mouseButtonDown && !mouseLeaveTimeout) {
-          mouseLeaveTimeout = setTimeout(function () {
-            stopDrawing()
-            clearMouseLeaveTimeout()
-          }, 500)
-        }
-      })
-
-      canvas.each(function () {
-        this.ontouchstart = null
-      })
-    }
+    canvas.each(function () {
+      this.ontouchstart = null
+    })
   }
 
   /**
